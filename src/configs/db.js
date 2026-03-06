@@ -8,11 +8,15 @@ async function connectDB() {
       throw new Error("MONGO_URI is not defined in environment variables");
     }
 
+    // Optimized for Vercel serverless environment
     await mongoose.connect(uri, {
-      serverSelectionTimeoutMS: 5000,
-      socketTimeoutMS: 45000,
-      maxPoolSize: 10,
-      minPoolSize: 2,
+      serverSelectionTimeoutMS: 5000, // Timeout for finding a server
+      socketTimeoutMS: 45000, // Close socket after inactivity
+      maxPoolSize: 10, // Maximum number of connections
+      minPoolSize: 2, // Minimum number of connections
+      maxIdleTimeMS: 10000, // Close idle connections after 10s
+      retryWrites: true, // Retry write operations
+      w: "majority", // Write concern
     });
 
     console.log("✅ Connected to MongoDB successfully");
