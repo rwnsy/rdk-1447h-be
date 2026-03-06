@@ -1,7 +1,6 @@
 require("dotenv").config();
 const express = require("express");
 const connectDB = require("../src/configs/db");
-const mongoose = require("mongoose");
 const articleRoutes = require("../src/routes/articleRoute");
 const donationRoutes = require("../src/routes/donationRoutes");
 const galleryRoutes = require("../src/routes/galleryRoutes");
@@ -15,6 +14,20 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// Database connection middleware — MUST be registered before routes.
+// connectDB handles connection caching internally; on warm Lambda instances
+// it returns immediately after confirming readyState === 1.
+app.use(async (req, res, next) => {
+  const connected = await connectDB();
+  if (!connected) {
+    return res.status(503).json({
+      success: false,
+      message: "Database connection unavailable",
+    });
+  }
+  next();
+});
 
 // Routes
 app.use(articleRoutes);
@@ -58,39 +71,6 @@ app.use((err, req, res, next) => {
   }
   if (err) {
     return res.status(400).json({ success: false, message: err.message });
-  }
-  next();
-});
-
-// Database connection - Vercel akan handle koneksi per request
-let isConnected = false;
-
-async function ensureConnection() {
-  if (isConnected && mongoose.connection.readyState === 1) {
-    return true;
-  }
-
-  try {
-    const dbConnected = await connectDB();
-    if (dbConnected) {
-      isConnected = true;
-      return true;
-    }
-    return false;
-  } catch (error) {
-    console.error("❌ Database connection error:", error);
-    return false;
-  }
-}
-
-// Middleware untuk memastikan database terkoneksi sebelum setiap request
-app.use(async (req, res, next) => {
-  const connected = await ensureConnection();
-  if (!connected) {
-    return res.status(503).json({
-      success: false,
-      message: "Database connection unavailable",
-    });
   }
   next();
 });

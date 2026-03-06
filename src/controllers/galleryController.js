@@ -4,7 +4,7 @@ const base64FileService = require("../services/Base64FileService");
 // CREATE a new gallery record (gambar opsional via multipart/form-data, field: 'images')
 exports.createGallery = async (req, res) => {
   try {
-    const { title, categories } = req.body;
+    const { categories } = req.body;
 
     const images = [];
     if (req.files && req.files.length > 0) {
@@ -20,7 +20,7 @@ exports.createGallery = async (req, res) => {
       }
     }
 
-    const newGallery = new Gallery({ title, categories, images });
+    const newGallery = new Gallery({ categories, images });
     const savedGallery = await newGallery.save();
     res.status(201).json({ success: true, data: savedGallery });
   } catch (error) {
