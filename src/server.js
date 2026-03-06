@@ -6,6 +6,7 @@ const connectDB = require("./configs/db");
 const mongoose = require("mongoose");
 const articleRoutes = require("./routes/articleRoute");
 const donationRoutes = require("./routes/donationRoutes");
+const galleryRoutes = require("./routes/galleryRoutes");
 
 process.env.TZ = "Asia/Jakarta";
 
@@ -13,6 +14,30 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(articleRoutes);
 app.use(donationRoutes);
+app.use(galleryRoutes);
+
+const multer = require("multer");
+app.use((err, req, res, next) => {
+  if (err instanceof multer.MulterError) {
+    if (err.code === "LIMIT_FILE_SIZE") {
+      return res.status(400).json({
+        success: false,
+        message: "Ukuran file melebihi batas maksimal 5MB.",
+      });
+    }
+    if (err.code === "LIMIT_UNEXPECTED_FILE") {
+      return res.status(400).json({
+        success: false,
+        message: `Field gambar tidak dikenal: '${err.field}'. Periksa nama field yang digunakan di Postman.`,
+      });
+    }
+    return res.status(400).json({ success: false, message: err.message });
+  }
+  if (err) {
+    return res.status(400).json({ success: false, message: err.message });
+  }
+  next();
+});
 
 process.on("SIGINT", async () => {
   try {
