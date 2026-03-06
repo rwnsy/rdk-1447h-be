@@ -1,5 +1,5 @@
-const expres = require('express');
-const router = expres.Router();
+const express = require('express');
+const router = express.Router();
 const donationController = require('../controllers/donationController');
 
 // CREATE a new donation record

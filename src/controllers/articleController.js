@@ -4,7 +4,8 @@ const base64FileService = require("../services/Base64FileService");
 // CREATE a new article (image opsional via multipart/form-data, field: 'image')
 exports.createArticle = async (req, res) => {
   try {
-    const { title, content, category, publishedDate, writer } = req.body;
+    const { title, content, summary, status, category, publishedDate, writer } =
+      req.body;
 
     let image = null;
     if (req.file) {
@@ -17,6 +18,8 @@ exports.createArticle = async (req, res) => {
     const newArticle = new Article({
       title,
       content,
+      summary,
+      status,
       category,
       publishedDate,
       writer,
@@ -111,9 +114,18 @@ exports.getArticleImage = async (req, res) => {
 exports.updateArticle = async (req, res) => {
   try {
     const { id } = req.params;
-    const { title, content, category, publishedDate, writer } = req.body;
+    const { title, content, summary, status, category, publishedDate, writer } =
+      req.body;
 
-    const updateData = { title, content, category, publishedDate, writer };
+    const updateData = {
+      title,
+      content,
+      summary,
+      status,
+      category,
+      publishedDate,
+      writer,
+    };
     if (req.file) {
       updateData.image = base64FileService.processImageForStorage(
         req.file.buffer,
