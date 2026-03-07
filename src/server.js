@@ -7,6 +7,7 @@ const mongoose = require("mongoose");
 const articleRoutes = require("./routes/articleRoute");
 const donationRoutes = require("./routes/donationRoutes");
 const galleryRoutes = require("./routes/galleryRoutes");
+const authRoutes = require("../src/routes/authRoutes");
 
 process.env.TZ = "Asia/Jakarta";
 
@@ -15,6 +16,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(articleRoutes);
 app.use(donationRoutes);
 app.use(galleryRoutes);
+app.use(authRoutes);
 
 const multer = require("multer");
 app.use((err, req, res, next) => {

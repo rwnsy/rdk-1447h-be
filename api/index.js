@@ -4,6 +4,7 @@ const connectDB = require("../src/configs/db");
 const articleRoutes = require("../src/routes/articleRoute");
 const donationRoutes = require("../src/routes/donationRoutes");
 const galleryRoutes = require("../src/routes/galleryRoutes");
+const authRoutes = require("../src/routes/authRoutes");
 const cors = require("cors");
 
 process.env.TZ = "Asia/Jakarta";
@@ -33,6 +34,7 @@ app.use(async (req, res, next) => {
 app.use(articleRoutes);
 app.use(donationRoutes);
 app.use(galleryRoutes);
+app.use(authRoutes);
 
 // Health check endpoint
 app.get("/", (req, res) => {
