@@ -19,7 +19,7 @@ const articleSchema = new Schema(
     content: { type: String, required: true },
     summary: { type: String, required: true },
     status: { type: String, enum: ["Draft", "Published"], default: "Draft" },
-    category: { type: String, required: true },
+    category: { type: Schema.Types.ObjectId, ref: "Category", required: true },
     publishedDate: { type: Date, required: true },
     writer: { type: String, required: true },
     image: { type: imageSchema, default: null },

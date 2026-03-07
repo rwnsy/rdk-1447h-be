@@ -12,6 +12,9 @@ router.get("/articles", articleController.getAllArticles);
 // GET a single article by ID
 router.get("/articles/:id", articleController.getArticleById);
 
+// GET article image as binary (untuk verifikasi hasil upload)
+router.get("/articles/:id/image", articleController.getArticleImage);
+
 // UPDATE an article by ID (image optional)
 router.put(
   "/articles/:id",

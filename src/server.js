@@ -5,6 +5,7 @@ const app = express();
 const connectDB = require("./configs/db");
 const mongoose = require("mongoose");
 const articleRoutes = require("./routes/articleRoute");
+const categoryRoutes = require("./routes/categoryRoute");
 const donationRoutes = require("./routes/donationRoutes");
 const galleryRoutes = require("./routes/galleryRoutes");
 
@@ -13,6 +14,7 @@ process.env.TZ = "Asia/Jakarta";
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(articleRoutes);
+app.use(categoryRoutes);
 app.use(donationRoutes);
 app.use(galleryRoutes);
 

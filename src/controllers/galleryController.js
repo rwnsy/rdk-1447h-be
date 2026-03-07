@@ -34,10 +34,11 @@ exports.createGallery = async (req, res) => {
   }
 };
 
-// GET all gallery records
+// GET all gallery records — base64Data excluded to keep response size small.
+// Use GET /galleries/:id/image/:index to retrieve the actual image binary.
 exports.getAllGalleries = async (req, res) => {
   try {
-    const galleries = await Gallery.find();
+    const galleries = await Gallery.find({}, { "images.base64Data": 0 });
     if (galleries.length === 0) {
       return res
         .status(404)
